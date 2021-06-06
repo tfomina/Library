@@ -8,7 +8,9 @@ import { BooksModule } from './books/books.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot('mongodb://localhost/library_db'),
+    MongooseModule.forRoot('mongodb://localhost/library_db', {
+      useFindAndModify: false,
+    }),
     BooksModule,
   ],
   controllers: [AppController],

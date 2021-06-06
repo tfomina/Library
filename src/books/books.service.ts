@@ -7,7 +7,9 @@ import { Book, BookDocument } from './schemas/book.schema';
 
 @Injectable()
 export class BooksService {
-  constructor(@InjectModel(Book.name) private bookModel: Model<BookDocument>) {}
+  constructor(
+    @InjectModel(Book.name) private readonly bookModel: Model<BookDocument>,
+  ) {}
 
   async findById(id: string): Promise<Book> {
     return this.bookModel.findById(id);

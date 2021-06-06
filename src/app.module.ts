@@ -9,6 +9,7 @@ import { BooksModule } from './books/books.module';
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot('mongodb://localhost/library_db', {
+      useNewUrlParser: true,
       useFindAndModify: false,
     }),
     BooksModule,

@@ -19,36 +19,36 @@ export class BooksController {
   constructor(private readonly booksService: BooksService) {}
 
   @Get()
-  findAll(@Res() res: Response) {
-    const books = this.booksService.findAll();
+  async findAll(@Res() res: Response) {
+    const books = await this.booksService.findAll();
     res.status(HttpStatus.OK).json(books);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string, @Res() res: Response) {
-    const book = this.booksService.findById(id);
+  async findOne(@Param('id') id: string, @Res() res: Response) {
+    const book = await this.booksService.findById(id);
     res.status(HttpStatus.OK).json(book);
   }
 
   @Post()
-  create(@Body() createBookDto: CreateBookDto, @Res() res: Response) {
-    this.booksService.create(createBookDto);
-    res.status(HttpStatus.CREATED).send();
+  async create(@Body() createBookDto: CreateBookDto, @Res() res: Response) {
+    const book = await this.booksService.create(createBookDto);
+    res.status(HttpStatus.CREATED).json(book);
   }
 
   @Put(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateBookDto: UpdateBookDto,
     @Res() res: Response,
   ) {
-    this.booksService.update(id, updateBookDto);
-    res.status(HttpStatus.OK).send();
+    const book = await this.booksService.update(id, updateBookDto);
+    res.status(HttpStatus.OK).json(book);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string, @Res() res: Response) {
-    this.booksService.deleteById(id);
-    res.status(HttpStatus.OK).send();
+  async remove(@Param('id') id: string, @Res() res: Response) {
+    const book = await this.booksService.deleteById(id);
+    res.status(HttpStatus.OK).json(book);
   }
 }

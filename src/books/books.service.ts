@@ -1,47 +1,31 @@
+import { Model } from 'mongoose';
 import { Injectable } from '@nestjs/common';
-import { Book } from './interfaces/book.interface';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-
-// TODO Удалить
-const testBooks = [
-  {
-    id: '1',
-    title: 'Book Title 1',
-    description: 'Description 1',
-    authors: 'Author 1',
-  },
-  {
-    id: '2',
-    title: 'Book Title 2',
-    description: 'Description 2',
-    authors: 'Author 2',
-  },
-];
+import { Book, BookDocument } from './schemas/book.schema';
 
 @Injectable()
 export class BooksService {
-  private books: Book[] = [...testBooks];
+  constructor(@InjectModel(Book.name) private bookModel: Model<BookDocument>) {}
 
-  findById(id: string): Book | undefined {
-    return this.books.find((book) => book.id === id);
+  async findById(id: string): Promise<Book> {
+    return this.bookModel.findById(id);
   }
 
-  findAll(): Book[] {
-    return this.books;
+  async findAll(): Promise<Book[]> {
+    return this.bookModel.find();
   }
 
-  create(book: CreateBookDto): void {
-    this.books.push(book);
+  async create(book: CreateBookDto): Promise<Book> {
+    return this.bookModel.create(book);
   }
 
-  update(id: string, updatedBook: UpdateBookDto): void {
-    this.books = this.books.map((book) =>
-      book.id === id ? { id, ...updatedBook } : book,
-    );
+  async update(id: string, book: UpdateBookDto): Promise<Book> {
+    return this.bookModel.findByIdAndUpdate(id, book, { new: true });
   }
 
-  deleteById(id: string): void {
-    this.books = this.books.filter((book) => book.id !== id);
+  async deleteById(id: string): Promise<Book> {
+    return this.bookModel.findByIdAndDelete(id);
   }
 }

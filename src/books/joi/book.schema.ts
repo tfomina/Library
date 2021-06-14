@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 
-export const createBookSchema = Joi.object().keys({
+export const bookSchema = Joi.object().keys({
   title: Joi.string().required(),
   description: Joi.string().required(),
   authors: Joi.string().required(),

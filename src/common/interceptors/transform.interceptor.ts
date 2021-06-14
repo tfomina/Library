@@ -25,7 +25,7 @@ export class TranfrormInterceptor<T>
     return next.handle().pipe(
       map((data) => ({ data, status: 'success' })),
       catchError((err) => {
-        console.log(`Error: ${err}`);
+        console.log(err);
         return throwError(new HttpException('Error', HttpStatus.BAD_GATEWAY));
       }),
     );

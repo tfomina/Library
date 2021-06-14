@@ -3,6 +3,8 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -22,7 +24,9 @@ export class TranfrormInterceptor<T>
   ): Observable<Response<T> | any> {
     return next.handle().pipe(
       map((data) => ({ data, status: 'success' })),
-      catchError((err) => throwError(err)),
+      catchError((err) =>
+        throwError(new HttpException('Error', HttpStatus.BAD_GATEWAY)),
+      ),
     );
   }
 }

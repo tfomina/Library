@@ -24,9 +24,10 @@ export class TranfrormInterceptor<T>
   ): Observable<Response<T> | any> {
     return next.handle().pipe(
       map((data) => ({ data, status: 'success' })),
-      catchError((err) =>
-        throwError(new HttpException('Error', HttpStatus.BAD_GATEWAY)),
-      ),
+      catchError((err) => {
+        console.log(`Error: ${err}`);
+        return throwError(new HttpException('Error', HttpStatus.BAD_GATEWAY));
+      }),
     );
   }
 }

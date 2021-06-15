@@ -36,7 +36,6 @@ export class BooksController {
   }
 
   @Put(':id')
-  @UsePipes()
   async update(
     @Param('id') id: string,
     @Body(new JoiValidationPipe(bookSchema)) updateBookDto: UpdateBookDto,

@@ -3,8 +3,7 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-  HttpException,
-  HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
@@ -23,10 +22,15 @@ export class TranfrormInterceptor<T>
     next: CallHandler,
   ): Observable<Response<T> | any> {
     return next.handle().pipe(
-      map((data) => ({ data, status: 'success' })),
+      map((data) => {
+        if (!data) {
+          throw new NotFoundException();
+        }
+        return { data, status: 'success' };
+      }),
       catchError((err) => {
         console.log(err);
-        return throwError(new HttpException('Error', HttpStatus.BAD_GATEWAY));
+        return throwError(err);
       }),
     );
   }

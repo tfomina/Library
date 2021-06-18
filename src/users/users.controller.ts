@@ -14,6 +14,7 @@ import { userSchema } from './joi/user.schema';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { JoiValidationPipe } from 'src/common/pipes/joi-validation.pipe';
 import { User } from './schemas/user.schema';
+import { MongoDBErrorCodes } from 'src/db/mongoDBErrorCodes.enum';
 
 const saltOrRounds = 10;
 
@@ -37,7 +38,7 @@ export class UsersController {
       user.passwordHash = undefined;
       return user;
     } catch (error) {
-      if (error?.code === 11000) {
+      if (error?.code === MongoDBErrorCodes.UniqueViolation) {
         throw new HttpException(
           'Пользователь с таким email уже зарегистрирован',
           HttpStatus.BAD_REQUEST,
